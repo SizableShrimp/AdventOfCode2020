@@ -1,0 +1,14 @@
+# Intellij
+.idea/
+*.iml
+*.iws
+*.ipr
+out
+
+# Gradle
+.gradle/
+build/
+
+#AOC
+aoc_input/
+session.txt

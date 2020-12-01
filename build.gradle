@@ -1,0 +1,23 @@
+/*
+ * Copyright (c) 2020 SizableShrimp.
+ * This file is provided under version 3 of the GNU Lesser General Public License.
+ */
+
+plugins {
+    id 'java'
+}
+
+group 'me.sizableshrimp'
+version '0.1.0'
+
+targetCompatibility = sourceCompatibility = 11
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile 'org.projectlombok:lombok:1.18.16'
+    annotationProcessor 'org.projectlombok:lombok:1.18.16'
+    //compile 'com.fasterxml.jackson.core:jackson-databind:'
+}
