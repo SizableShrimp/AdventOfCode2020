@@ -9,7 +9,11 @@ import java.util.List;
 import java.util.stream.IntStream;
 
 public class Streams {
-    public static IntStream unboxIntList(List<Integer> boxedList) {
-        return boxedList.stream().mapToInt(i -> i);
+    public static IntStream unboxInts(List<Integer> boxed) {
+        return boxed.stream().mapToInt(i -> i);
+    }
+
+    public static IntStream ints(int... arr) {
+        return IntStream.of(arr);
     }
 }

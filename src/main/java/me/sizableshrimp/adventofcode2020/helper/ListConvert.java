@@ -37,26 +37,6 @@ public class ListConvert {
                 .collect(Collectors.toList());
     }
 
-    public static boolean[][] copyOf(boolean[][] array) {
-        boolean[][] copy = new boolean[array.length][];
-        for (int i = 0; i < array.length; i++) {
-            boolean[] arr = array[i];
-            copy[i] = new boolean[arr.length];
-            System.arraycopy(arr, 0, copy[i], 0, arr.length);
-        }
-        return copy;
-    }
-
-    public static int[][] copyOf(int[][] array) {
-        int[][] copy = new int[array.length][];
-        for (int i = 0; i < array.length; i++) {
-            int[] arr = array[i];
-            copy[i] = new int[arr.length];
-            System.arraycopy(arr, 0, copy[i], 0, arr.length);
-        }
-        return copy;
-    }
-
     private static <T> List<T> convert(List<String> list, Function<String, T> func) {
         return list.stream()
                 .map(func)
