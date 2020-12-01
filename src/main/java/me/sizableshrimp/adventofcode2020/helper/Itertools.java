@@ -82,9 +82,7 @@ public class Itertools {
                 return result;
 
             indices[last]++;
-            for (Integer j : IntStream.range(last + 1, r).boxed().collect(Collectors.toList())) {
-                indices[j] = indices[j - 1] + 1;
-            }
+            IntStream.range(last + 1, r).forEach(j -> indices[j] = indices[j - 1] + 1);
             result.add(yieldResult(pool, indices));
         }
     }
