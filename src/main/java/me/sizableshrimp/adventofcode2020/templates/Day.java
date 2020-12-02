@@ -5,7 +5,10 @@
 
 package me.sizableshrimp.adventofcode2020.templates;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import me.sizableshrimp.adventofcode2020.helper.DataManager;
 
 import java.util.List;
@@ -18,9 +21,7 @@ import java.util.Objects;
  */
 public abstract class Day {
     @Getter
-    private String part1;
-    @Getter
-    private String part2;
+    private Result result;
 
     /**
      * The lines parsed from the input file for the challenge. For example, an input file with the data:
@@ -42,18 +43,29 @@ public abstract class Day {
      */
     public void run() {
         long before = System.nanoTime();
-        parse();
-        evaluate();
+        result = parseAndEvaluate();
         long after = System.nanoTime();
-        System.out.println("Part 1: " + part1);
-        System.out.println("Part 2: " + part2);
+        System.out.println("Part 1: " + result.part1);
+        System.out.println("Part 2: " + result.part2);
         System.out.printf("Completed in %.3fs%n%n", (after - before) / 1_000_000_000f);
+    }
+
+    /**
+     * Parse and then evaluate a day's code.
+     * This is not guaranteed to be repeatable without constructing a new instance of the class.
+     *
+     * @return A {@link Result} holding data of the first and second part
+     */
+    public Result parseAndEvaluate() {
+        parse();
+        result = evaluate();
+        return result;
     }
 
     /**
      * This internal method is what actually evaluates the result of part 1 and part 2.
      */
-    protected abstract void evaluate();
+    protected abstract Result evaluate();
 
     /**
      * This internal method can be overridden to parse the {@link #lines} of the day into something more useful for
@@ -63,11 +75,27 @@ public abstract class Day {
      */
     protected void parse() {}
 
-    protected void setPart1(Object obj) {
-        part1 = Objects.toString(obj);
-    }
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class Result {
+        Object part1;
+        Object part2;
 
-    protected void setPart2(Object obj) {
-        part2 = Objects.toString(obj);
+        public String getPart1() {
+            return Objects.toString(part1);
+        }
+
+        public String getPart2() {
+            return Objects.toString(part2);
+        }
+
+        public Object getPart1Obj() {
+            return part1;
+        }
+
+        public Object getPart2Obj() {
+            return part2;
+        }
     }
 }

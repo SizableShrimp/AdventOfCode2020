@@ -22,8 +22,7 @@ public abstract class SeparatedDay extends Day {
     protected abstract Object part2();
 
     @Override
-    protected final void evaluate() {
-        setPart1(part1());
-        setPart2(part2());
+    protected final Result evaluate() {
+        return new Result(part1(), part2());
     }
 }

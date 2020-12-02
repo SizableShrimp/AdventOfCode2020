@@ -9,9 +9,13 @@ import me.sizableshrimp.adventofcode2020.templates.Day;
 
 public class BaseClass extends Day {
     @Override
-    protected void evaluate() {
-        // setPart1();
-        // setPart2();
+    protected Result evaluate() {
+        Result result = new Result();
+
+        // result.setPart1();
+        // result.setPart2();
+
+        return result;
     }
 
     @Override

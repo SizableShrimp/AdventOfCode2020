@@ -26,11 +26,10 @@ public class Day01 extends SeparatedDay {
     }
 
     private Object traverse(boolean returnEarly) {
-        return traverse(returnEarly, false, 2020);
+        return traverse(returnEarly, new HashSet<>(), false, 2020);
     }
 
-    private int traverse(boolean returnEarly, boolean inner, int target) {
-        Set<Integer> seen = new HashSet<>();
+    private int traverse(boolean returnEarly, Set<Integer> seen, boolean inner, int target) {
         for (int current : expenseReport) {
             int diff = target - current;
             if (diff <= 0)
@@ -39,7 +38,7 @@ public class Day01 extends SeparatedDay {
                 if (seen.contains(diff))
                     return inner ? diff : current * diff;
             } else {
-                int third = traverse(true, true, diff);
+                int third = traverse(true, seen, true, diff);
                 if (third != -1)
                     return current * (diff - third) * third;
             }

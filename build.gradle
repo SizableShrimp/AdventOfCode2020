@@ -10,7 +10,7 @@ plugins {
 group 'me.sizableshrimp'
 version '0.1.0'
 
-targetCompatibility = sourceCompatibility = 11
+targetCompatibility = sourceCompatibility = 15
 
 repositories {
     mavenCentral()
