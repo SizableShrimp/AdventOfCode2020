@@ -15,6 +15,7 @@ Part 2: 456
 Completed in 5.298ms
 ```
 Note that "Completed in X.XXXms" is not a real or accurate benchmark, but my own approximate measure of how long a day takes to run.
+For real benchmarks, please see `gradle jmh` and the `Benchmarks` class.
 If you would like to run a specific day outside the month of the December, use `run(int)` in the `Main` class.
 
 ### Information About Data Manager
