@@ -20,11 +20,9 @@ import java.util.Objects;
  * Each day has two parts to it to solve the entire day.
  */
 public abstract class Day {
-    @Getter
-    private Result result;
-
     /**
-     * The lines parsed from the input file for the challenge. For example, an input file with the data:
+     * An <b>unmodifiable</b>> list of the lines parsed from the input file for the challenge.
+     * For example, an input file with the data:
      * <pre>{@code 1
      * 2
      * 3
@@ -40,26 +38,26 @@ public abstract class Day {
 
     /**
      * Execute a given day; outputting part 1, part 2, and the time taken.
+     * Time taken is using {@link System#nanoTime()} and is not a real benchmark.
      */
     public void run() {
         long before = System.nanoTime();
-        result = parseAndEvaluate();
+        Result result = parseAndEvaluate();
         long after = System.nanoTime();
         System.out.println("Part 1: " + result.part1);
         System.out.println("Part 2: " + result.part2);
-        System.out.printf("Completed in %.3fs%n%n", (after - before) / 1_000_000_000f);
+        System.out.printf("Completed in %.3fms%n%n", (after - before) / 1_000_000f);
     }
 
     /**
      * Parse and then evaluate a day's code.
-     * This is not guaranteed to be repeatable without constructing a new instance of the class.
+     * This should be guaranteed to be repeatable without constructing a new instance of the class.
      *
      * @return A {@link Result} holding data of the first and second part
      */
     public Result parseAndEvaluate() {
         parse();
-        result = evaluate();
-        return result;
+        return evaluate();
     }
 
     /**

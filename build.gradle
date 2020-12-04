@@ -19,5 +19,6 @@ repositories {
 dependencies {
     compile 'org.projectlombok:lombok:1.18.16'
     annotationProcessor 'org.projectlombok:lombok:1.18.16'
-    //compile 'com.fasterxml.jackson.core:jackson-databind:2.12.0'
+    compile 'com.svetylkovo:rojo:1.0.3'
+    // compile 'com.fasterxml.jackson.core:jackson-databind:2.12.0'
 }

@@ -3,7 +3,9 @@
 *.iml
 *.iws
 *.ipr
-out
+out/
+generated/
+generated_tests/
 
 # Gradle
 .gradle/

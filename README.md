@@ -12,9 +12,9 @@ An output from a day looks like the following:
 Day 1:
 Part 1: 123
 Part 2: 456
-Completed in 0.529s
+Completed in 5.298ms
 ```
-Note that "Completed in X.XXXs" is not a real or accurate benchmark but my own hacky way to measure how long a day takes to run, approximately.
+Note that "Completed in X.XXXms" is not a real or accurate benchmark, but my own approximate measure of how long a day takes to run.
 If you would like to run a specific day outside the month of the December, use `run(int)` in the `Main` class.
 
 ### Information About Data Manager
