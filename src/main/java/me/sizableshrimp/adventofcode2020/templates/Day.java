@@ -7,7 +7,6 @@ package me.sizableshrimp.adventofcode2020.templates;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
 import me.sizableshrimp.adventofcode2020.helper.DataManager;
 
@@ -39,21 +38,24 @@ public abstract class Day {
     /**
      * Execute a given day; outputting part 1, part 2, and the time taken.
      * Time taken is using {@link System#nanoTime()} and is not a real benchmark.
+     *
+     * @return A {@link Result} holding data of the first and second part.
      */
-    public void run() {
+    public Result run() {
         long before = System.nanoTime();
         Result result = parseAndEvaluate();
         long after = System.nanoTime();
         System.out.println("Part 1: " + result.part1);
         System.out.println("Part 2: " + result.part2);
         System.out.printf("Completed in %.3fms%n%n", (after - before) / 1_000_000f);
+        return result;
     }
 
     /**
      * Parse and then evaluate a day's code.
      * This should be guaranteed to be repeatable without constructing a new instance of the class.
      *
-     * @return A {@link Result} holding data of the first and second part
+     * @return A {@link Result} holding data of the first and second part.
      */
     public Result parseAndEvaluate() {
         parse();

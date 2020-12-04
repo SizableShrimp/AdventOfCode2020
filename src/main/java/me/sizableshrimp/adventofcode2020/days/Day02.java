@@ -14,7 +14,6 @@ import lombok.Data;
 import me.sizableshrimp.adventofcode2020.templates.Day;
 
 import java.util.function.Function;
-import java.util.regex.Pattern;
 
 public class Day02 extends Day {
     @Override

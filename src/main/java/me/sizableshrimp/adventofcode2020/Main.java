@@ -14,6 +14,8 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class Main {
     /**
@@ -22,6 +24,7 @@ public class Main {
      * Otherwise, it is useless.
      */
     public static final int YEAR = 2020;
+    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("MM-dd-yyyy HH:mm");
     private static final String BASE_PACKAGE = Main.class.getPackageName() + ".days.";
 
     public static void main(String[] args) {
@@ -55,22 +58,37 @@ public class Main {
         }
     }
 
-    //TODO wip
     private static void waitForDay() {
-        LocalDateTime time = LocalDateTime.now(ZoneId.of("America/New_York"));
-        LocalDateTime release = time.plus(Duration.ofDays(1)).withSecond(0).withMinute(0).withHour(0);
+        LocalDateTime now = LocalDateTime.now(ZoneId.of("America/New_York"));
+        LocalDateTime release = now.plus(Duration.ofDays(1)).withNano(0).withSecond(0).withMinute(0).withHour(0);
         int dayOfMonth = release.getDayOfMonth();
         if (release.getMonth() != Month.DECEMBER || dayOfMonth > 25 || YEAR != release.getYear())
             throw new IllegalArgumentException("Cannot use \"wait\" if it is not during AOC!");
-        System.out.println(release);
-        // while (true) {
-        //     System.out.println(LocalDateTime.now(ZoneId.of("America/New_York")));
-        //     try {
-        //         Thread.currentThread().sleep(1000);
-        //     } catch (InterruptedException e) {
-        //         e.printStackTrace();
-        //     }
-        // }
+        System.out.println("Releases at " + release.format(FORMATTER));
+        try {
+            boolean doneThisMinute = false;
+            while (true) {
+                now = LocalDateTime.now(ZoneId.of("America/New_York"));
+                if (now.getMinute() % 5 == 0) {
+                    if (!doneThisMinute) {
+                        System.out.println(now.format(FORMATTER));
+                        doneThisMinute = true;
+                    }
+                } else {
+                    doneThisMinute = false;
+                }
+                if (now.isAfter(release)) {
+                    int rand = ThreadLocalRandom.current().nextInt(10, 31);
+                    Thread.sleep(rand * 1000L);
+                    DataManager.read(dayOfMonth);
+                    break;
+                }
+                Thread.sleep(1000);
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
     }
 
     /**
