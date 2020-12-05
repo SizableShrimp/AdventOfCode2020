@@ -14,6 +14,7 @@ import java.util.Map;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.IntSupplier;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class Day04 extends Day {
@@ -62,6 +63,9 @@ public class Day04 extends Day {
         return current.entrySet().stream().map(e -> conversion.get(e.getKey()).isValid(e.getValue())).reduce(true, (a, b) -> a && b);
     }
 
+    private static final Pattern hex = Pattern.compile("#[0-9a-f]{6}");
+    private static final Pattern eyeColors = Pattern.compile("(amb|blu|brn|gry|grn|hzl|oth)");
+
     @AllArgsConstructor
     private enum PassportEntry {
         byr((e, supp) -> validateInt(e, supp, 1920, 2002)),
@@ -72,8 +76,8 @@ public class Day04 extends Day {
             case "in" -> betweenInclusive(Integer.parseInt(e.substring(0, e.length() - 2)), 59, 76);
             default -> false;
         }),
-        hcl((e, supp) -> e.matches("#[0-9a-f]{6}")),
-        ecl((e, supp) -> e.matches("(amb|blu|brn|gry|grn|hzl|oth)")),
+        hcl((e, supp) -> hex.matcher(e).matches()),
+        ecl((e, supp) -> eyeColors.matcher(e).matches()),
         pid((e, supp) -> {
             // Will throw NFE if invalid
             supp.getAsInt();
