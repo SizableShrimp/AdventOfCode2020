@@ -46,27 +46,28 @@ public class Day09 extends SeparatedDay {
         if (part1 == 0)
             return null;
         long target = all.get(part1);
-        long[] prefixSums = ArrayConvert.prefixSumsLong(all);
+        // long[] prefixSums = ArrayConvert.prefixSumsLong(all);
 
         // System.out.println(part1);
         int left = part1 - 1;
         int right = part1;
+        long sum = all.get(left) + all.get(right);
 
         while (true) {
-            long sum = prefixSums[right] - prefixSums[left - 1];
-
             if (sum < target) {
                 // If the current sum is less than the target, we don't have enough numbers
                 // and need to slide our left bound to the left to get a higher sum.
 
                 // System.out.println("too low: " + left + " - " + right);
                 left--;
+                sum += all.get(left);
             }  else if (sum > target) {
                 // If the current sum is more than the target, we have too many numbers
                 // and need to slide our right bound to the left to get a lower sum.
 
                 // System.out.println("too high: " + left + " - " + right);
                 right--;
+                sum -= all.get(right + 1);
             } else {
                 List<Long> window = all.subList(left, right);
                 LongSummaryStatistics stats = Streams.unboxLongs(window).summaryStatistics();
