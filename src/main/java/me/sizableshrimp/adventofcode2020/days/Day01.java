@@ -5,15 +5,14 @@
 
 package me.sizableshrimp.adventofcode2020.days;
 
-import me.sizableshrimp.adventofcode2020.helper.ListConvert;
+import me.sizableshrimp.adventofcode2020.helper.ArrayConvert;
 import me.sizableshrimp.adventofcode2020.templates.SeparatedDay;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 public class Day01 extends SeparatedDay {
-    private List<Integer> expenseReport;
+    private int[] expenseReport;
 
     @Override
     protected Object part1() {
@@ -57,6 +56,6 @@ public class Day01 extends SeparatedDay {
 
     @Override
     protected void parse() {
-        expenseReport = ListConvert.ints(lines);
+        expenseReport = ArrayConvert.ints(lines);
     }
 }

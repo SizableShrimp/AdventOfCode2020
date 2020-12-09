@@ -8,9 +8,7 @@ package me.sizableshrimp.adventofcode2020;
 import me.sizableshrimp.adventofcode2020.templates.Day;
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
-import org.openjdk.jmh.annotations.Fork;
 import org.openjdk.jmh.annotations.Level;
-import org.openjdk.jmh.annotations.Measurement;
 import org.openjdk.jmh.annotations.Mode;
 import org.openjdk.jmh.annotations.OutputTimeUnit;
 import org.openjdk.jmh.annotations.Scope;
@@ -25,10 +23,16 @@ import java.util.concurrent.TimeUnit;
 @BenchmarkMode(Mode.AverageTime)
 public class Benchmarks {
     @Benchmark
-    @Fork(value = 3, warmups = 1)
-    @Measurement(iterations = 3, time = 1000, timeUnit = TimeUnit.MILLISECONDS)
-    public void measureDay(DayState state) {
+    // @Fork(value = 3, warmups = 1)
+    // @Measurement(iterations = 3, time = 1000, timeUnit = TimeUnit.MILLISECONDS)
+    public void parseAndEvaluate(DayState state) {
         state.instance.parseAndEvaluate();
+    }
+
+    @Benchmark
+    @SuppressWarnings("deprecation")
+    public void parseOnly(DayState state) {
+        state.instance.parseTesting();
     }
 
     @State(Scope.Thread)

@@ -17,17 +17,21 @@ public class Day02 extends Day {
         int positionCount = 0;
         // RojoBeanMatcher<Input> matcher = Rojo.of(Input.class);
         Pattern pattern = Pattern.compile("(\\d+)-(\\d+) (\\w): (\\w+)");
+
         for (String line : lines) {
             // Input input = matcher.match(line).get();
             Matcher matcher = pattern.matcher(line);
             matcher.matches();
+
             int least = Integer.parseInt(matcher.group(1));
             int most = Integer.parseInt(matcher.group(2));
             char policy = matcher.group(3).charAt(0);
             String password = matcher.group(4);
+
             long num = password.chars()
                     .filter(c -> c == policy)
                     .count();
+
             if (num >= least && num <= most)
                 validCount++;
             // XOR

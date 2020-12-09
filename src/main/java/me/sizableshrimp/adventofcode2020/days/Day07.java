@@ -7,6 +7,7 @@ package me.sizableshrimp.adventofcode2020.days;
 
 import lombok.EqualsAndHashCode;
 import lombok.Value;
+import me.sizableshrimp.adventofcode2020.helper.Parser;
 import me.sizableshrimp.adventofcode2020.templates.Day;
 
 import java.util.ArrayDeque;
@@ -45,14 +46,10 @@ public class Day07 extends Day {
     @Override
     protected void parse() {
         nodes = new HashMap<>();
-        for (String line : lines) {
-            parseNode(line);
-        }
+        Parser.parseLines(bagPattern, lines, this::parseNode);
     }
 
-    private void parseNode(String line) {
-        Matcher bagMatcher = bagPattern.matcher(line);
-        bagMatcher.matches();
+    private void parseNode(Matcher bagMatcher, String line) {
         Node node = nodes.computeIfAbsent(bagMatcher.group(1), Node::new);
         String data = bagMatcher.group(2);
         if (data.equals("no other bags"))
@@ -85,14 +82,6 @@ public class Day07 extends Day {
                 sum += num * (entry.getKey().calcChildren() + 1);
             }
             return sum;
-        }
-
-        @Override
-        public String toString() {
-            return "Node{" +
-                    "parents=" + parents +
-                    ", name='" + name + '\'' +
-                    '}';
         }
     }
 }

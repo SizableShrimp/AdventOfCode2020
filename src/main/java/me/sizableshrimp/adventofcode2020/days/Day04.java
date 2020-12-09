@@ -6,61 +6,53 @@
 package me.sizableshrimp.adventofcode2020.days;
 
 import lombok.AllArgsConstructor;
+import me.sizableshrimp.adventofcode2020.helper.Processor;
 import me.sizableshrimp.adventofcode2020.templates.Day;
 
-import java.util.Arrays;
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.Map;
 import java.util.function.BiFunction;
-import java.util.function.Function;
 import java.util.function.IntSupplier;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class Day04 extends Day {
-    private final Map<String, PassportEntry> conversion = Arrays.stream(PassportEntry.values())
-            .collect(Collectors.toMap(Enum::toString, Function.identity()));
+    private String[] passports;
 
     @Override
     protected Result evaluate() {
         int part1 = 0;
         int part2 = 0;
-        Map<String, String> current = new HashMap<>();
+        Map<PassportEntry, String> current = new EnumMap<>(PassportEntry.class);
 
-        for (String line : lines) {
-            if (line.isBlank()) {
-                if (validate(current, true)) {
-                    part1++;
-                }
-                if (validate(current, false))
-                    part2++;
-                current.clear();
-                continue;
-            }
-            for (String part : line.split(" ")) {
+        for (String passport : passports) {
+            for (String part : passport.split(" ")) {
                 String[] entry = part.split(":");
                 String key = entry[0];
                 // Skip cid
                 if (!key.equals("cid"))
-                    current.put(key, entry[1]);
+                    current.put(PassportEntry.valueOf(key), entry[1]);
             }
+
+            boolean hasAll = current.size() == 7; // Keys are always valid so we can just check the amount
+            if (hasAll) {
+                part1++;
+                boolean valid = current.entrySet().stream().map(e -> e.getKey().isValid(e.getValue())).reduce(true, (a, b) -> a && b);
+                if (valid)
+                    part2++;
+            }
+
+            current.clear();
         }
-        if (validate(current, true))
-            part1++;
-        if (validate(current, false))
-            part2++;
 
         return new Result(part1, part2);
     }
 
-    private boolean validate(Map<String, String> current, boolean partOne) {
-        boolean hasAll = current.size() == conversion.size(); // Keys are always valid so we can just check the amount
-        if (partOne)
-            return hasAll;
-        if (!hasAll)
-            return false;
-
-        return current.entrySet().stream().map(e -> conversion.get(e.getKey()).isValid(e.getValue())).reduce(true, (a, b) -> a && b);
+    @Override
+    protected void parse() {
+        passports = Processor.splitStream(lines, String::isBlank)
+                .map(s -> s.collect(Collectors.joining(" ")))
+                .toArray(String[]::new);
     }
 
     private static final Pattern hex = Pattern.compile("#[0-9a-f]{6}");

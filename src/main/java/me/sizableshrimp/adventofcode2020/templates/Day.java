@@ -34,6 +34,10 @@ public abstract class Day {
      * the Advent Of Code servers to request the input data. See {@link DataManager#read} for more details.
      */
     protected List<String> lines = DataManager.read(Integer.parseInt(getClass().getSimpleName().substring(3)));
+    /**
+     * The raw file input, denoting lines by <b>Unix-style endings</b> or <code>\n</code>.
+     */
+    protected String raw = String.join("\n", lines);
 
     /**
      * Execute a given day; outputting part 1, part 2, and the time taken.
@@ -41,7 +45,7 @@ public abstract class Day {
      *
      * @return A {@link Result} holding data of the first and second part.
      */
-    public Result run() {
+    public final Result run() {
         long before = System.nanoTime();
         Result result = parseAndEvaluate();
         long after = System.nanoTime();
@@ -57,7 +61,7 @@ public abstract class Day {
      *
      * @return A {@link Result} holding data of the first and second part.
      */
-    public Result parseAndEvaluate() {
+    public final Result parseAndEvaluate() {
         parse();
         return evaluate();
     }
@@ -66,6 +70,14 @@ public abstract class Day {
      * This internal method is what actually evaluates the result of part 1 and part 2.
      */
     protected abstract Result evaluate();
+
+    /**
+     * @deprecated This should only be using for benchmarking purposes. Other uses are not supported.
+     */
+    @Deprecated
+    public void parseTesting() {
+        parse();
+    }
 
     /**
      * This internal method can be overridden to parse the {@link #lines} of the day into something more useful for

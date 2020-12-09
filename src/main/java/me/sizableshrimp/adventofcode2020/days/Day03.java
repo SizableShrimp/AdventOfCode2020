@@ -8,21 +8,21 @@ package me.sizableshrimp.adventofcode2020.days;
 import me.sizableshrimp.adventofcode2020.templates.Coordinate;
 import me.sizableshrimp.adventofcode2020.templates.Day;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Arrays;
 
 public class Day03 extends Day {
     @Override
     protected Result evaluate() {
-        List<Coordinate> slopes = List.of(new Coordinate(1, 1), new Coordinate(3, 1), new Coordinate(5, 1),
-                new Coordinate(7, 1), new Coordinate(1, 2));
-        List<Long> results = new ArrayList<>(slopes.size());
+        Coordinate[] slopes = {new Coordinate(1, 1), new Coordinate(3, 1), new Coordinate(5, 1),
+                new Coordinate(7, 1), new Coordinate(1, 2)};
+        long[] results = new long[slopes.length];
 
         // Slower
         // boolean[][] grid = GridHelper.convertBool((y, x) -> new boolean[y][x], lines, c -> c == '#');
         int length = lines.get(0).length();
 
-        for (Coordinate next : slopes) {
+        for (int i = 0; i < slopes.length; i++) {
+            Coordinate next = slopes[i];
             Coordinate add = next;
             long count = 0;
             while (next.y < lines.size()) {
@@ -31,9 +31,9 @@ public class Day03 extends Day {
                     count++;
                 next = next.resolve(add);
             }
-            results.add(count);
+            results[i] = count;
         }
 
-        return new Result(results.get(1), results.stream().reduce((a, b) -> a * b).get());
+        return new Result(results[1], Arrays.stream(results).reduce((a, b) -> a * b).getAsLong());
     }
 }

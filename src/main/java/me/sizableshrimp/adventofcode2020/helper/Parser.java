@@ -41,11 +41,11 @@ public class Parser {
      * @param consumer The consumer to use the matcher and line data returned for each line.
      */
     public static void parseLines(Pattern pattern, List<String> lines, BiConsumer<Matcher, String> consumer) {
-        lines.forEach(line -> {
+        for (String line : lines) {
             Matcher m = pattern.matcher(line);
             m.matches();
             consumer.accept(m, line);
-        });
+        }
     }
 
     /**
@@ -56,10 +56,10 @@ public class Parser {
      * @param consumer The consumer to use the matcher and line data returned for each line.
      */
     public static void parseLinesFind(Pattern pattern, List<String> lines, BiConsumer<Matcher, String> consumer) {
-        lines.forEach(line -> {
+        for (String line : lines) {
             Matcher m = pattern.matcher(line);
             m.find();
             consumer.accept(m, line);
-        });
+        }
     }
 }
