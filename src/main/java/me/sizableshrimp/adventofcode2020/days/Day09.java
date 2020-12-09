@@ -5,6 +5,7 @@
 
 package me.sizableshrimp.adventofcode2020.days;
 
+import me.sizableshrimp.adventofcode2020.helper.ArrayConvert;
 import me.sizableshrimp.adventofcode2020.helper.ListConvert;
 import me.sizableshrimp.adventofcode2020.helper.Streams;
 import me.sizableshrimp.adventofcode2020.templates.SeparatedDay;
@@ -16,12 +17,12 @@ public class Day09 extends SeparatedDay {
     private List<Long> all;
     private int part1;
 
-
     @Override
     protected Object part1() {
-        for (int i = 25; i < all.size(); i++) {
+        int windowSize = 25;
+        for (int i = windowSize; i < all.size(); i++) {
             long input = all.get(i);
-            List<Long> window = all.subList(i - 25, i);
+            List<Long> window = all.subList(i - windowSize, i);
 
             boolean found = false;
             for (long l : window) {
@@ -45,22 +46,33 @@ public class Day09 extends SeparatedDay {
         if (part1 == 0)
             return null;
         long target = all.get(part1);
+        long[] prefixSums = ArrayConvert.prefixSumsLong(all);
 
-        for (int j = 2; j < all.size(); j++) {
-            for (int i = part1 - j; i >= 0; i--) {
-                List<Long> window = all.subList(i, i + j);
+        // System.out.println(part1);
+        int left = part1 - 1;
+        int right = part1;
+
+        while (true) {
+            long sum = prefixSums[right] - prefixSums[left - 1];
+
+            if (sum < target) {
+                // If the current sum is less than the target, we don't have enough numbers
+                // and need to slide our left bound to the left to get a higher sum.
+
+                // System.out.println("too low: " + left + " - " + right);
+                left--;
+            }  else if (sum > target) {
+                // If the current sum is more than the target, we have too many numbers
+                // and need to slide our right bound to the left to get a lower sum.
+
+                // System.out.println("too high: " + left + " - " + right);
+                right--;
+            } else {
+                List<Long> window = all.subList(left, right);
                 LongSummaryStatistics stats = Streams.unboxLongs(window).summaryStatistics();
-                if (stats.getSum() < target) {
-                    // If the current sum is less than the target, we have gone past the
-                    // possible answer which means this window size is not correct.
-                    break;
-                } else if (stats.getSum() == target) {
-                    return stats.getMin() + stats.getMax();
-                }
+                return stats.getMin() + stats.getMax();
             }
         }
-
-        return null;
     }
 
     @Override

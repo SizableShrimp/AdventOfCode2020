@@ -96,6 +96,20 @@ public class ArrayConvert {
                 .map(func);
     }
 
+    public static long[] prefixSumsLong(List<Long> list) {
+        if (list.isEmpty())
+                return new long[0];
+
+        long[] prefixSums = new long[list.size()];
+        prefixSums[0] = list.get(0);
+
+        for (int i = 1; i < prefixSums.length; i++) {
+            prefixSums[i] = list.get(i) + prefixSums[i - 1];
+        }
+
+        return prefixSums;
+    }
+
     // private static <T, U extends BaseStream<T, U>> U convert(List<String> list, Function<String, T> func, Function<Stream<T>, U> transform) {
     //     Stream<T> boxedStream = list.stream()
     //             .map(func);
