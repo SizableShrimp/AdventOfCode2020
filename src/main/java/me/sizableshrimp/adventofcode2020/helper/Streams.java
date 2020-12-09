@@ -7,6 +7,7 @@ package me.sizableshrimp.adventofcode2020.helper;
 
 import java.util.Collection;
 import java.util.stream.IntStream;
+import java.util.stream.LongStream;
 import java.util.stream.Stream;
 
 public class Streams {
@@ -14,8 +15,8 @@ public class Streams {
         return boxed.stream().mapToInt(i -> i);
     }
 
-    public static IntStream ints(int... arr) {
-        return IntStream.of(arr);
+    public static LongStream unboxLongs(Collection<Long> boxed) {
+        return boxed.stream().mapToLong(l -> l);
     }
 
     public static String unboxChars(IntStream charStream) {
