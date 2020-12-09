@@ -32,7 +32,7 @@ public class Main {
     private static final String BASE_PACKAGE = Main.class.getPackageName() + ".days.";
 
     public static void main(String[] args) {
-        run(new String[]{"all"});
+        run(args);
     }
 
     /**
