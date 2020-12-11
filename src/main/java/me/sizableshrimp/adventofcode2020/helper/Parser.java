@@ -6,6 +6,7 @@
 package me.sizableshrimp.adventofcode2020.helper;
 
 import me.sizableshrimp.adventofcode2020.templates.Coordinate;
+import me.sizableshrimp.adventofcode2020.templates.EnumState;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -61,5 +62,13 @@ public class Parser {
             m.find();
             consumer.accept(m, line);
         }
+    }
+
+    public static <T extends Enum<T> & EnumState<T>> T parseEnumState(T[] enumConstants, char c) {
+        for (T t : enumConstants) {
+            if (t.getMappedChar() == c)
+                return t;
+        }
+        throw new IllegalArgumentException();
     }
 }

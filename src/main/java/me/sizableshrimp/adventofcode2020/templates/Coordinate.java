@@ -5,11 +5,10 @@
 
 package me.sizableshrimp.adventofcode2020.templates;
 
-import lombok.AllArgsConstructor;
 import lombok.Value;
+import me.sizableshrimp.adventofcode2020.helper.GridHelper;
 
 import java.util.Arrays;
-import java.util.Map;
 
 /**
  * A 2-dimensional coordinate object that holds an x and a y value.
@@ -18,39 +17,6 @@ import java.util.Map;
 public class Coordinate {
     public static final Coordinate ZERO = new Coordinate(0, 0);
     public int x, y;
-
-    /**
-     * The four cardinal directions, associated with degrees and relative x, y positions
-     * where NORTH is at 0 degrees and a relative x,y of (0,-1).
-     */
-    @AllArgsConstructor
-    public enum Direction {
-        NORTH(0, 0, -1), EAST(90, 1, 0), SOUTH(180, 0, 1), WEST(270, -1, 0);
-
-        public final int degrees;
-        public final int x;
-        public final int y;
-
-        public static Direction getDirection(int degrees) {
-            if (degrees < 0)
-                degrees = 360 + degrees;
-            degrees %= 360;
-            for (Direction direction : values()) {
-                if (direction.degrees == degrees)
-                    return direction;
-            }
-
-            return Direction.NORTH;
-        }
-
-        public static Map<Character, Direction> getDirections(char up, char right, char down, char left) {
-            return Map.of(up, NORTH, right, EAST, down, SOUTH, left, WEST);
-        }
-
-        public Direction opposite() {
-            return values()[(ordinal() + 2) % values().length];
-        }
-    }
 
     /**
      * Creates a new {@link Coordinate} based on the offset of x and y given in parameters added to the current
@@ -70,6 +36,10 @@ public class Coordinate {
 
     public Coordinate resolve(Direction direction) {
         return resolve(direction.x, direction.y);
+    }
+
+    public <T> boolean isValid(T[][] grid) {
+        return GridHelper.isValid(grid, this);
     }
 
     /**
