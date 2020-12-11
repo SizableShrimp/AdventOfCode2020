@@ -15,7 +15,9 @@ public class IntcodeBaseClass extends Day {
 
     @Override
     protected Result evaluate() {
-        return new Result();
+        Result result = new Result();
+
+        return result;
     }
 
     @Override

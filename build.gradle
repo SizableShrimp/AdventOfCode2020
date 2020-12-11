@@ -7,7 +7,7 @@ plugins {
     id 'java'
 }
 
-group 'me.sizableshrimp'
+group 'me.sizableshrimp.adventofcode'
 version '0.1.0'
 
 targetCompatibility = sourceCompatibility = 15
@@ -17,12 +17,13 @@ repositories {
 }
 
 dependencies {
-    compile 'org.projectlombok:lombok:1.18.16'
+    implementation 'org.projectlombok:lombok:1.18.16'
     annotationProcessor 'org.projectlombok:lombok:1.18.16'
-    compile 'com.svetylkovo:rojo:1.0.3'
-    // compile 'com.fasterxml.jackson.core:jackson-databind:2.12.0'
+    implementation 'com.svetylkovo:rojo:1.0.3'
+    implementation 'one.util:streamex:0.7.3'
+    // implementation 'com.fasterxml.jackson.core:jackson-databind:2.12.0'
 
-    testCompile 'org.openjdk.jmh:jmh-core:1.26'
+    testImplementation 'org.openjdk.jmh:jmh-core:1.26'
     testAnnotationProcessor 'org.openjdk.jmh:jmh-generator-annprocess:1.26'
 }
 

@@ -49,9 +49,10 @@ public abstract class Day {
         long before = System.nanoTime();
         Result result = parseAndEvaluate();
         long after = System.nanoTime();
+        float time = (after - before) / 1_000_000f;
         System.out.println("Part 1: " + result.part1);
         System.out.println("Part 2: " + result.part2);
-        System.out.printf("Completed in %.3fms%n%n", (after - before) / 1_000_000f);
+        System.out.printf("Completed in %.3fms%n%n", time);
         return result;
     }
 
@@ -75,7 +76,7 @@ public abstract class Day {
      * @deprecated This should only be using for benchmarking purposes. Other uses are not supported.
      */
     @Deprecated
-    public void parseTesting() {
+    public final void parseTesting() {
         parse();
     }
 
