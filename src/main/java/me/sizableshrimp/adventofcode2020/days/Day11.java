@@ -18,15 +18,15 @@ public class Day11 extends SeparatedDay {
 
     @Override
     protected Object part1() {
-        return runUntilRepeat(4, false);
+        return runUntilSame(4, false);
     }
 
     @Override
     protected Object part2() {
-        return runUntilRepeat(5, true);
+        return runUntilSame(5, true);
     }
 
-    private Object runUntilRepeat(int overcrowded, boolean raytrace) {
+    private Object runUntilSame(int overcrowded, boolean raytrace) {
         State[][] grid = GridHelper.copy(initial);
 
         while (true) {
