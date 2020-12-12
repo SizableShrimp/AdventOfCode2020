@@ -19,16 +19,23 @@
 package me.sizableshrimp.adventofcode2020.days;
 
 import me.sizableshrimp.adventofcode2020.templates.Coordinate;
-import me.sizableshrimp.adventofcode2020.templates.Day;
 import me.sizableshrimp.adventofcode2020.templates.Direction;
+import me.sizableshrimp.adventofcode2020.templates.SeparatedDay;
 
-public class Day12 extends Day {
+public class Day12 extends SeparatedDay {
     @Override
-    protected Result evaluate() {
-        Coordinate part1 = Coordinate.ZERO;
-        Coordinate part2 = Coordinate.ZERO;
-        Coordinate waypoint = Coordinate.of(10, -1);
-        Direction dir = Direction.EAST;
+    protected Object part1() {
+        return runNavigation(Direction.EAST.asCoords(), true);
+    }
+
+    @Override
+    protected Object part2() {
+        return runNavigation(Coordinate.of(10, -1), false);
+    }
+
+    private int runNavigation(Coordinate startWaypoint, boolean moveShip) {
+        Coordinate ship = Coordinate.ORIGIN;
+        Coordinate waypoint = startWaypoint;
 
         for (String line : lines) {
             char c = line.charAt(0);
@@ -37,29 +44,17 @@ public class Day12 extends Day {
                 case 'N', 'E', 'S', 'W' -> {
                     Direction temp = Direction.getCardinalDirection(c);
                     Coordinate mult = Coordinate.of(temp.x * num, temp.y * num);
-                    // Part 1
-                    part1 = part1.resolve(mult);
-                    // Part 2
-                    waypoint = waypoint.resolve(mult);
+                    if (moveShip)
+                        ship = ship.resolve(mult);
+                    else
+                        waypoint = waypoint.resolve(mult);
                 }
-                case 'L', 'R' -> {
-                    int degrees = c == 'L' ? -num : num;
-                    // Part 1
-                    dir = dir.relativeDegrees(degrees);
-                    // Part 2
-                    waypoint = waypoint.rotate90(degrees);
-                }
-                case 'F' -> {
-                    for (int i = 0; i < num; i++) {
-                        // Part 1
-                        part1 = part1.resolve(dir);
-                        // Part 2
-                        part2 = part2.resolve(waypoint);
-                    }
-                }
+                case 'L' -> waypoint = waypoint.rotate90(-num);
+                case 'R' -> waypoint = waypoint.rotate90(num);
+                case 'F' -> ship = ship.resolve(waypoint.x * num, waypoint.y * num); // Multiplies waypoint x,y by num and adds it to the ship
             }
         }
 
-        return new Result(part1.distanceZero(), part2.distanceZero());
+        return ship.distanceToOrigin();
     }
 }

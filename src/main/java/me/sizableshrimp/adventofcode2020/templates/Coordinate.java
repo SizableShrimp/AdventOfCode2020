@@ -30,7 +30,7 @@ import java.util.Arrays;
 @Value
 @AllArgsConstructor(staticName = "of")
 public class Coordinate {
-    public static final Coordinate ZERO = new Coordinate(0, 0);
+    public static final Coordinate ORIGIN = new Coordinate(0, 0);
     public int x, y;
 
     public static Coordinate of(double x, double y) {
@@ -75,7 +75,7 @@ public class Coordinate {
     }
 
     /**
-     * Rotates an (x,y) {@link Coordinate} by {@code degrees} which is a multiple of 90.
+     * Rotates an (x,y) {@link Coordinate} around the {@link Coordinate#ORIGIN} by {@code degrees} which is a multiple of 90.
      *
      * @param degrees A degree value that is a multiple of 90.
      * @return A rotated {@link Coordinate}.
@@ -99,11 +99,11 @@ public class Coordinate {
     }
 
     /**
-     * Finds the Manhattan distance from this coordinate to (0, 0).
+     * Finds the Manhattan distance from this coordinate to the origin at (0, 0).
      *
-     * @return The Manhattan distance from this coordinate to (0, 0).
+     * @return The Manhattan distance from this coordinate to the origin at (0, 0).
      */
-    public int distanceZero() {
+    public int distanceToOrigin() {
         return distance(0, 0);
     }
 
@@ -130,14 +130,14 @@ public class Coordinate {
 
     /**
      * Finds the relative {@link Direction Direction} needed to get from this coordinate to the other coordinate specified.
-     * Returns null if the two coordinates are not within one tile in cardinal directions away.
+     * Returns null if the two coordinates are not within one tile in cardinal or ordinal directions away.
      *
      * @param other Another coordinate used to find the relative direction towards.
      * @return The {@link Direction Direction} needed to move from this coordinate to the other coordinate specified,
-     * or null if this is not possible in one move in cardinal directions.
+     * or null if this is not possible in one move in cardinal or ordinal directions.
      */
     public Direction relative(Coordinate other) {
-        return Arrays.stream(Direction.values()).filter(d -> resolve(d).equals(other)).findAny().orElse(null);
+        return Arrays.stream(Direction.cardinalOrdinalDirections()).filter(d -> resolve(d).equals(other)).findAny().orElse(null);
     }
 
     /**
