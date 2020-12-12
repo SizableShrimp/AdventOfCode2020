@@ -7,6 +7,7 @@ package me.sizableshrimp.adventofcode2020.templates;
 
 import lombok.AllArgsConstructor;
 
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -20,6 +21,7 @@ public enum Direction {
     SOUTH(180, 0, 1), SOUTHWEST(225, -1, 1),
     WEST(270, -1, 0), NORTHWEST(315, -1, -1);
 
+    private static final Map<Integer, Direction> degreesMap = new HashMap<>();
     private static final Direction[] CARDINAL = {NORTH, EAST, SOUTH, WEST};
     private static final Direction[] ORDINAL = {NORTHEAST, SOUTHEAST, SOUTHWEST, NORTHWEST};
     private static final Direction[] CARDINAL_ORDINAL = {NORTH, EAST, SOUTH, WEST, NORTHEAST, SOUTHEAST, SOUTHWEST, NORTHWEST};
@@ -28,24 +30,25 @@ public enum Direction {
     public final int x;
     public final int y;
 
-    public static Direction getDirection(int degrees) {
+    static {
+        for (Direction dir : values()) {
+            degreesMap.put(dir.degrees, dir);
+        }
+    }
+
+    public static Direction fromDegrees(int degrees) {
         if (degrees < 0)
             degrees = 360 + degrees;
         degrees %= 360;
-        for (Direction direction : values()) {
-            if (direction.degrees == degrees)
-                return direction;
-        }
 
-        return Direction.NORTH;
+        Direction dir = degreesMap.get(degrees);
+        if (dir == null)
+            throw new IllegalArgumentException("Invalid degrees: " + degrees);
+        return dir;
     }
 
     public static Map<Character, Direction> getCardinalDirections(char up, char right, char down, char left) {
         return Map.of(up, NORTH, right, EAST, down, SOUTH, left, WEST);
-    }
-
-    public Direction opposite() {
-        return values()[(ordinal() + 2) % values().length];
     }
 
     public static Direction parseDirection(int xDiff, int yDiff) {
@@ -54,6 +57,28 @@ public enum Direction {
                 return dir;
         }
         throw new IllegalArgumentException();
+    }
+
+    public static Direction getCardinalDirection(char c) {
+        return switch (c) {
+            case 'N' -> NORTH;
+            case 'E' -> EAST;
+            case 'S' -> SOUTH;
+            case 'W' -> WEST;
+            default -> throw new IllegalStateException("Unexpected value: " + c);
+        };
+    }
+
+    public Direction opposite() {
+        return fromDegrees(this.degrees + 180);
+    }
+
+    public Coordinate asCoords() {
+        return Coordinate.of(this.x, this.y);
+    }
+
+    public Direction relativeDegrees(int degrees) {
+        return fromDegrees(this.degrees + degrees);
     }
 
     public static Direction[] cardinalDirections() {

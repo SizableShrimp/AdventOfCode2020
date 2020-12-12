@@ -13,8 +13,8 @@ import java.util.Arrays;
 public class Day03 extends Day {
     @Override
     protected Result evaluate() {
-        Coordinate[] slopes = {new Coordinate(1, 1), new Coordinate(3, 1), new Coordinate(5, 1),
-                new Coordinate(7, 1), new Coordinate(1, 2)};
+        Coordinate[] slopes = {Coordinate.of(1, 1), Coordinate.of(3, 1), Coordinate.of(5, 1),
+                Coordinate.of(7, 1), Coordinate.of(1, 2)};
         long[] results = new long[slopes.length];
 
         // Slower

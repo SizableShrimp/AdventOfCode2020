@@ -70,7 +70,7 @@ public class Day11 extends SeparatedDay {
         int count = 0;
 
         for (Direction dir : Direction.cardinalOrdinalDirections()) {
-            Coordinate temp = new Coordinate(x, y).resolve(dir);
+            Coordinate temp = Coordinate.of(x, y).resolve(dir);
             while (temp.isValid(grid)) {
                 State s = grid[temp.y][temp.x];
                 // If it is a seat OR we aren't raytracing, always break

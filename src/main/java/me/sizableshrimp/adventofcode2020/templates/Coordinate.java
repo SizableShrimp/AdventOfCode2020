@@ -5,6 +5,7 @@
 
 package me.sizableshrimp.adventofcode2020.templates;
 
+import lombok.AllArgsConstructor;
 import lombok.Value;
 import me.sizableshrimp.adventofcode2020.helper.GridHelper;
 
@@ -14,9 +15,14 @@ import java.util.Arrays;
  * A 2-dimensional coordinate object that holds an x and a y value.
  */
 @Value
+@AllArgsConstructor(staticName = "of")
 public class Coordinate {
     public static final Coordinate ZERO = new Coordinate(0, 0);
     public int x, y;
+
+    public static Coordinate of(double x, double y) {
+        return Coordinate.of((int) x, (int) y);
+    }
 
     /**
      * Creates a new {@link Coordinate} based on the offset of x and y given in parameters added to the current
@@ -36,6 +42,43 @@ public class Coordinate {
 
     public Coordinate resolve(Direction direction) {
         return resolve(direction.x, direction.y);
+    }
+
+    public Coordinate multiply(Coordinate mut) {
+        return multiply(mut.x, mut.y);
+    }
+
+    public Coordinate multiply(int factor) {
+        return multiply(factor, factor);
+    }
+
+    public Coordinate multiply(int xFactor, int yFactor) {
+        return new Coordinate(this.x * xFactor, this.y * yFactor);
+    }
+
+    @SuppressWarnings("SuspiciousNameCombination")
+    public Coordinate swapXY() {
+        return new Coordinate(y, x);
+    }
+
+    /**
+     * Rotates an (x,y) {@link Coordinate} by {@code degrees} which is a multiple of 90.
+     *
+     * @param degrees A degree value that is a multiple of 90.
+     * @return A rotated {@link Coordinate}.
+     */
+    public Coordinate rotate90(int degrees) {
+        if (degrees < 0)
+            degrees = 360 + degrees;
+        degrees %= 360;
+
+        return switch (degrees) {
+            case 90 -> this.swapXY().multiply(-1, 1);
+            case 180 -> this.multiply(-1, -1);
+            case 270 -> this.swapXY().multiply(1, -1);
+            case 0 -> this;
+            default -> throw new IllegalStateException("Degrees is not a multiple of 90: " + degrees);
+        };
     }
 
     public <T> boolean isValid(T[][] grid) {
