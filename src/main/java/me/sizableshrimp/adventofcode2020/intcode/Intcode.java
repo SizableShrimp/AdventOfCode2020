@@ -30,9 +30,9 @@ import java.util.Set;
 
 @Getter(AccessLevel.PACKAGE)
 public class Intcode {
+    private final List<Instruction> instructions;
     @Setter(AccessLevel.PACKAGE)
     private long accumulator;
-    private final List<Instruction> instructions;
     private boolean exit;
     private int pointer; // Current index
 
@@ -51,6 +51,12 @@ public class Intcode {
             pointer = calculate(op);
         }
         return new ExitState(true, accumulator);
+    }
+
+    public int calculate(Instruction inst) {
+        Integer next = inst.getCode().apply(this, inst);
+        // Currently only supports RELATIVE mode
+        return pointer + Objects.requireNonNullElse(next, 1);
     }
 
     public ExitLoop runUntilRepeat() {
@@ -76,12 +82,6 @@ public class Intcode {
             pointer = calculate(op);
         }
         return new ExitLoop(accumulator, pointer, seen);
-    }
-
-    public int calculate(Instruction inst) {
-        Integer next = inst.getCode().apply(this, inst);
-        // Currently only supports RELATIVE mode
-        return pointer + Objects.requireNonNullElse(next, 1);
     }
 
     long adjustAccumulator(long amount) {

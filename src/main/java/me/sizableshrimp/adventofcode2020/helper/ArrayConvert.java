@@ -34,6 +34,11 @@ public class ArrayConvert {
         return convert(list, Integer::valueOf).mapToInt(i -> i).toArray();
     }
 
+    private static <T> Stream<T> convert(List<String> list, Function<String, T> func) {
+        return list.stream()
+                .map(func);
+    }
+
     public static int[] unboxInts(List<Integer> boxed) {
         return boxed.stream().mapToInt(i -> i).toArray();
     }
@@ -104,14 +109,9 @@ public class ArrayConvert {
         return copy;
     }
 
-    private static <T> Stream<T> convert(List<String> list, Function<String, T> func) {
-        return list.stream()
-                .map(func);
-    }
-
     public static long[] prefixSumsLong(List<Long> list) {
         if (list.isEmpty())
-                return new long[0];
+            return new long[0];
 
         long[] prefixSums = new long[list.size()];
         prefixSums[0] = list.get(0);

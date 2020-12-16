@@ -30,6 +30,8 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class Day04 extends Day {
+    private static final Pattern hex = Pattern.compile("#[0-9a-f]{6}");
+    private static final Pattern eyeColors = Pattern.compile("(amb|blu|brn|gry|grn|hzl|oth)");
     private String[] passports;
 
     @Override
@@ -67,9 +69,6 @@ public class Day04 extends Day {
                 .map(s -> s.collect(Collectors.joining(" ")))
                 .toArray(String[]::new);
     }
-
-    private static final Pattern hex = Pattern.compile("#[0-9a-f]{6}");
-    private static final Pattern eyeColors = Pattern.compile("(amb|blu|brn|gry|grn|hzl|oth)");
 
     @AllArgsConstructor
     private enum PassportEntry {

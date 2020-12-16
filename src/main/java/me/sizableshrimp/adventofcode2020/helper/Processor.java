@@ -33,6 +33,10 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 public class Processor {
+    public static <T> BinaryOperator<Set<T>> unionBinaryOp() {
+        return Processor::union;
+    }
+
     // Union
     public static <T> Set<T> union(Set<T> result, Collection<T> element) {
         if (result == null) {
@@ -43,12 +47,12 @@ public class Processor {
         return result;
     }
 
-    public static <T> BinaryOperator<Set<T>> unionBinaryOp() {
-        return Processor::union;
-    }
-
     public static <T> Set<T> unionArray(Set<T> result, T[] element) {
         return union(result, Arrays.asList(element));
+    }
+
+    public static <T> Set<T> intersectionArray(Set<T> result, T[] element) {
+        return intersection(result, Arrays.asList(element));
     }
 
     // Intersection
@@ -59,10 +63,6 @@ public class Processor {
             result.retainAll(element);
         }
         return result;
-    }
-
-    public static <T> Set<T> intersectionArray(Set<T> result, T[] element) {
-        return intersection(result, Arrays.asList(element));
     }
 
     public static <T> BinaryOperator<Set<T>> intersectionBinaryOp() {
@@ -95,6 +95,19 @@ public class Processor {
                 .collect(Collectors.toList());
     }
 
+    private static <T> Stream<T> split(int length, IntPredicate splitter, BiFunction<Integer, Integer, T> func) {
+        List<Integer> indices = new ArrayList<>();
+        indices.add(-1);
+        for (int i = 0; i < length; i++) {
+            if (splitter.test(i))
+                indices.add(i);
+        }
+        indices.add(length);
+
+        return IntStream.range(0, indices.size() - 1)
+                .mapToObj(i -> func.apply(indices.get(i) + 1, indices.get(i + 1)));
+    }
+
     public static <T> Stream<Stream<T>> splitStream(List<T> list, Predicate<T> splitter) {
         int length = list.size();
         return split(length, i -> splitter.test(list.get(i)),
@@ -110,18 +123,5 @@ public class Processor {
     public static <T> Stream<Stream<T>> splitStream(T[] arr, Predicate<T> splitter) {
         return split(arr.length, i -> splitter.test(arr[i]),
                 (a, b) -> Arrays.stream(Arrays.copyOfRange(arr, a, b)));
-    }
-
-    private static <T> Stream<T> split(int length, IntPredicate splitter, BiFunction<Integer, Integer, T> func) {
-        List<Integer> indices = new ArrayList<>();
-        indices.add(-1);
-        for (int i = 0; i < length; i++) {
-            if (splitter.test(i))
-                indices.add(i);
-        }
-        indices.add(length);
-
-        return IntStream.range(0, indices.size() - 1)
-                .mapToObj(i -> func.apply(indices.get(i) + 1, indices.get(i + 1)));
     }
 }

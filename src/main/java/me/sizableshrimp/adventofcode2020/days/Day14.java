@@ -27,13 +27,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.BiConsumer;
 import java.util.function.LongConsumer;
-import java.util.regex.Pattern;
 
 public class Day14 extends SeparatedDay {
     private List<BitOp> ops;
-    private final Pattern pattern = Pattern.compile("mem\\[(\\d+)]");
 
     @Override
     protected Long part1() {
@@ -108,7 +105,7 @@ public class Day14 extends SeparatedDay {
             String value = split[1];
             long longValue = -1;
             if (!isMask) {
-                address = Parser.parseMatch(pattern, split[0]).groupLong(1);
+                address = Parser.parseMatch("mem\\[(\\d+)]", split[0]).groupLong(1);
                 longValue = Long.parseLong(value);
                 value = null;
             }

@@ -38,6 +38,23 @@ public class Coordinate {
     }
 
     /**
+     * Parses a coordinate in the format "x,y".
+     *
+     * @param coord The input string of which to parse a coordinate.
+     * @return A new {@link Coordinate} object.
+     */
+    public static Coordinate parse(String coord) {
+        String[] arr = coord.split(",");
+        int x = Integer.parseInt(arr[0]);
+        int y = Integer.parseInt(arr[1]);
+        return new Coordinate(x, y);
+    }
+
+    public Coordinate resolve(Coordinate other) {
+        return resolve(other.x, other.y);
+    }
+
+    /**
      * Creates a new {@link Coordinate} based on the offset of x and y given in parameters added to the current
      * coordinate.
      *
@@ -49,29 +66,16 @@ public class Coordinate {
         return new Coordinate(this.x + x, this.y + y);
     }
 
-    public Coordinate resolve(Coordinate other) {
-        return resolve(other.x, other.y);
-    }
-
-    public Coordinate resolve(Direction direction) {
-        return resolve(direction.x, direction.y);
-    }
-
     public Coordinate multiply(Coordinate mut) {
         return multiply(mut.x, mut.y);
-    }
-
-    public Coordinate multiply(int factor) {
-        return multiply(factor, factor);
     }
 
     public Coordinate multiply(int xFactor, int yFactor) {
         return new Coordinate(this.x * xFactor, this.y * yFactor);
     }
 
-    @SuppressWarnings("SuspiciousNameCombination")
-    public Coordinate swapXY() {
-        return new Coordinate(y, x);
+    public Coordinate multiply(int factor) {
+        return multiply(factor, factor);
     }
 
     /**
@@ -92,6 +96,11 @@ public class Coordinate {
             case 0 -> this;
             default -> throw new IllegalStateException("Degrees is not a multiple of 90: " + degrees);
         };
+    }
+
+    @SuppressWarnings("SuspiciousNameCombination")
+    public Coordinate swapXY() {
+        return new Coordinate(y, x);
     }
 
     public <T> boolean isValid(T[][] grid) {
@@ -140,17 +149,8 @@ public class Coordinate {
         return Arrays.stream(Direction.cardinalOrdinalDirections()).filter(d -> resolve(d).equals(other)).findAny().orElse(null);
     }
 
-    /**
-     * Parses a coordinate in the format "x,y".
-     *
-     * @param coord The input string of which to parse a coordinate.
-     * @return A new {@link Coordinate} object.
-     */
-    public static Coordinate parse(String coord) {
-        String[] arr = coord.split(",");
-        int x = Integer.parseInt(arr[0]);
-        int y = Integer.parseInt(arr[1]);
-        return new Coordinate(x, y);
+    public Coordinate resolve(Direction direction) {
+        return resolve(direction.x, direction.y);
     }
 
     @Override

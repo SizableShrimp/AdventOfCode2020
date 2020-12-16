@@ -145,18 +145,6 @@ public class Main {
         }
     }
 
-    public static Constructor<Day> getCurrentDayConstructor() throws ClassNotFoundException, NoSuchMethodException {
-        LocalDateTime time = LocalDateTime.now(ZoneId.of("America/New_York"));
-        int dayOfMonth = time.getDayOfMonth();
-
-        if (time.getMonth() == Month.DECEMBER && dayOfMonth <= 25) {
-            return getDayConstructor(dayOfMonth);
-
-        }
-
-        throw new IllegalStateException("Cannot get current day if it is not during AOC!");
-    }
-
     @SuppressWarnings("unchecked")
     public static Constructor<Day> getDayConstructor(int dayOfMonth) throws ClassNotFoundException, NoSuchMethodException {
         Class<?> clazz = Class.forName(BASE_PACKAGE + "Day" + pad(dayOfMonth));
@@ -167,6 +155,22 @@ public class Main {
         } else {
             throw new ClassNotFoundException("Detected day class does not extend SeparatedDay or Day");
         }
+    }
+
+    public static String pad(int i) {
+        return String.format("%02d", i);
+    }
+
+    public static Constructor<Day> getCurrentDayConstructor() throws ClassNotFoundException, NoSuchMethodException {
+        LocalDateTime time = LocalDateTime.now(ZoneId.of("America/New_York"));
+        int dayOfMonth = time.getDayOfMonth();
+
+        if (time.getMonth() == Month.DECEMBER && dayOfMonth <= 25) {
+            return getDayConstructor(dayOfMonth);
+
+        }
+
+        throw new IllegalStateException("Cannot get current day if it is not during AOC!");
     }
 
     private static void runAll() {
@@ -187,9 +191,5 @@ public class Main {
         }
         long after = System.nanoTime();
         System.out.printf("Completed all days in %.3fms%n%n", (after - before) / 1_000_000f);
-    }
-
-    public static String pad(int i) {
-        return String.format("%02d", i);
     }
 }

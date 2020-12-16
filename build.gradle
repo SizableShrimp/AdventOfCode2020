@@ -19,7 +19,6 @@ repositories {
 dependencies {
     implementation 'org.projectlombok:lombok:1.18.16'
     annotationProcessor 'org.projectlombok:lombok:1.18.16'
-    implementation 'com.svetylkovo:rojo:1.0.3'
     implementation 'one.util:streamex:0.7.3'
     // implementation 'com.fasterxml.jackson.core:jackson-databind:2.12.0'
 

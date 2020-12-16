@@ -20,6 +20,7 @@ package me.sizableshrimp.adventofcode2020.days;
 
 import lombok.EqualsAndHashCode;
 import lombok.Value;
+import me.sizableshrimp.adventofcode2020.helper.MatchWrapper;
 import me.sizableshrimp.adventofcode2020.helper.Parser;
 import me.sizableshrimp.adventofcode2020.templates.Day;
 
@@ -29,12 +30,10 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Day07 extends Day {
     private static final Pattern bagPattern = Pattern.compile("(.+) bags contain (.+)\\.");
-    private static final Pattern partPattern = Pattern.compile("(\\d+?) (.+?) bags?");
     private HashMap<String, Node> nodes;
 
     @Override
@@ -62,18 +61,17 @@ public class Day07 extends Day {
         Parser.parseLines(bagPattern, lines, this::parseNode);
     }
 
-    private void parseNode(Matcher bagMatcher, String line) {
-        Node node = nodes.computeIfAbsent(bagMatcher.group(1), Node::new);
-        String data = bagMatcher.group(2);
+    private void parseNode(MatchWrapper bagMatch) {
+        Node node = nodes.computeIfAbsent(bagMatch.group(1), Node::new);
+        String data = bagMatch.group(2);
         if (data.equals("no other bags"))
             return;
 
         String[] split = data.split(", ");
         for (String part : split) {
-            Matcher partMatcher = partPattern.matcher(part);
-            partMatcher.matches();
-            int num = Integer.parseInt(partMatcher.group(1));
-            Node n = nodes.computeIfAbsent(partMatcher.group(2), Node::new);
+            MatchWrapper partMatch = Parser.parseMatch("(\\d+?) (.+?) bags?", part);
+            int num = partMatch.groupInt(1);
+            Node n = nodes.computeIfAbsent(partMatch.group(2), Node::new);
             node.children.put(n, num);
             n.parents.add(node);
         }

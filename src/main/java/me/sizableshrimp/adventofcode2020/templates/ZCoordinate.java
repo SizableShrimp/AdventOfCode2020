@@ -29,6 +29,24 @@ public class ZCoordinate {
     public int x, y, z;
 
     /**
+     * Parses a coordinate in the format "x,y,z".
+     *
+     * @param coord The input string of which to parse a coordinate.
+     * @return A new {@link Coordinate} object.
+     */
+    public static ZCoordinate parse(String coord) {
+        String[] arr = coord.split(",");
+        int x = Integer.parseInt(arr[0]);
+        int y = Integer.parseInt(arr[1]);
+        int z = Integer.parseInt(arr[2]);
+        return new ZCoordinate(x, y, z);
+    }
+
+    public ZCoordinate resolve(ZCoordinate other) {
+        return resolve(other.x, other.y, other.z);
+    }
+
+    /**
      * Creates a new {@link ZCoordinate} based on the offset of x, y, and z given in parameters added to the current
      * coordinate.
      *
@@ -39,10 +57,6 @@ public class ZCoordinate {
      */
     public ZCoordinate resolve(int x, int y, int z) {
         return new ZCoordinate(this.x + x, this.y + y, this.z + z);
-    }
-
-    public ZCoordinate resolve(ZCoordinate other) {
-        return resolve(other.x, other.y, other.z);
     }
 
     /**
@@ -74,20 +88,6 @@ public class ZCoordinate {
      */
     public int distance(ZCoordinate other) {
         return distance(other.x, other.y, other.z);
-    }
-
-    /**
-     * Parses a coordinate in the format "x,y,z".
-     *
-     * @param coord The input string of which to parse a coordinate.
-     * @return A new {@link Coordinate} object.
-     */
-    public static ZCoordinate parse(String coord) {
-        String[] arr = coord.split(",");
-        int x = Integer.parseInt(arr[0]);
-        int y = Integer.parseInt(arr[1]);
-        int z = Integer.parseInt(arr[2]);
-        return new ZCoordinate(x, y, z);
     }
 
     @Override

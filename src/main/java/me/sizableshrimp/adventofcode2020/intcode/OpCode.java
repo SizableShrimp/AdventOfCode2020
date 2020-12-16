@@ -36,12 +36,11 @@ public enum OpCode {
     JUMP("jmp", (ic, op) -> op.getArgs()[0]),
     NOP("nop", (ic, op) -> null);
 
+    private static final Map<String, OpCode> codes = Arrays.stream(values())
+            .collect(Collectors.toMap(oc -> oc.code, Function.identity()));
     final String code;
     @Delegate
     BiFunction<Intcode, Instruction, Integer> operation;
-
-    private static final Map<String, OpCode> codes = Arrays.stream(values())
-            .collect(Collectors.toMap(oc -> oc.code, Function.identity()));
 
     public static OpCode getOpCode(String code) {
         OpCode opcode = codes.get(code);

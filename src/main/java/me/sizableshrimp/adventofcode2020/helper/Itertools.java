@@ -72,8 +72,7 @@ public class Itertools {
      * @param <T> The type of element in the input collection.
      * @return A List of combinations of the input collection, where each combination is of length r and sorted by
      * lexicographic order.
-     * @see
-     * <a href=https://docs.python.org/2/library/itertools.html#itertools.combinations>Python itertools.combinations</a>
+     * @see <a href=https://docs.python.org/2/library/itertools.html#itertools.combinations>Python itertools.combinations</a>
      */
     public static <T> List<List<T>> combinations(Collection<T> collection, int r) {
         List<List<T>> result = new ArrayList<>();

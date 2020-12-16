@@ -44,16 +44,26 @@ public class GridHelper {
         return convert(grid, lines, func);
     }
 
+    public static <T> T[][] convert(T[][] grid, List<String> lines, Function<Character, T> func) {
+        convert(lines, (y, x, c) -> grid[y][x] = func.apply(c));
+        return grid;
+    }
+
+    private static void convert(List<String> lines, GridConsumer consumer) {
+        for (int y = 0; y < lines.size(); y++) {
+            String line = lines.get(y);
+            char[] chars = line.toCharArray();
+            for (int x = 0; x < chars.length; x++) {
+                consumer.accept(y, x, chars[x]);
+            }
+        }
+    }
+
     @SuppressWarnings("unchecked")
     public static <T extends Enum<T> & EnumState<T>> T[][] convert(BiFunction<Integer, Integer, T[][]> generator, List<String> lines) {
         T[][] grid = generator.apply(lines.size(), lines.get(0).length());
         T[] enumConstants = ((Class<T>) grid.getClass().getComponentType().getComponentType()).getEnumConstants();
         return convert(grid, lines, c -> Parser.parseEnumState(enumConstants, c));
-    }
-
-    public static <T> T[][] convert(T[][] grid, List<String> lines, Function<Character, T> func) {
-        convert(lines, (y, x, c) -> grid[y][x] = func.apply(c));
-        return grid;
     }
 
     public static boolean[][] convertBool(BiFunction<Integer, Integer, boolean[][]> generator, List<String> lines, Predicate<Character> pred) {
@@ -84,16 +94,6 @@ public class GridHelper {
     public static long[][] convertLong(long[][] grid, List<String> lines, LongFunction<Character> func) {
         convert(lines, (y, x, c) -> grid[y][x] = func.apply(c));
         return grid;
-    }
-
-    private static void convert(List<String> lines, GridConsumer consumer) {
-        for (int y = 0; y < lines.size(); y++) {
-            String line = lines.get(y);
-            char[] chars = line.toCharArray();
-            for (int x = 0; x < chars.length; x++) {
-                consumer.accept(y, x, chars[x]);
-            }
-        }
     }
 
     public static <T> void print(T[][] grid) {
@@ -136,17 +136,6 @@ public class GridHelper {
         return result;
     }
 
-    public static int countOccurrences(boolean[][] grid, boolean target) {
-        int result = 0;
-        for (boolean[] row : grid) {
-            for (boolean b : row) {
-                if (b == target)
-                    result++;
-            }
-        }
-        return result;
-    }
-
     public static <T> boolean isValid(T[][] grid, Coordinate coord) {
         return isValid(grid, coord.x, coord.y);
     }
@@ -157,6 +146,17 @@ public class GridHelper {
 
     public static boolean allFalse(boolean[][] grid) {
         return countOccurrences(grid, false) == (grid.length * grid[0].length);
+    }
+
+    public static int countOccurrences(boolean[][] grid, boolean target) {
+        int result = 0;
+        for (boolean[] row : grid) {
+            for (boolean b : row) {
+                if (b == target)
+                    result++;
+            }
+        }
+        return result;
     }
 
     /**

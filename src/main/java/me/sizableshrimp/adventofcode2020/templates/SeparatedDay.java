@@ -24,6 +24,11 @@ package me.sizableshrimp.adventofcode2020.templates;
  * separate the parts.
  */
 public abstract class SeparatedDay extends Day {
+    @Override
+    protected final Result evaluate() {
+        return new Result(part1(), part2());
+    }
+
     /**
      * @return The result of part 1
      */
@@ -33,9 +38,4 @@ public abstract class SeparatedDay extends Day {
      * @return The result of part 2
      */
     protected abstract Object part2();
-
-    @Override
-    protected final Result evaluate() {
-        return new Result(part1(), part2());
-    }
 }

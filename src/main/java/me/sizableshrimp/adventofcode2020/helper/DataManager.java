@@ -19,7 +19,6 @@
 package me.sizableshrimp.adventofcode2020.helper;
 
 import lombok.SneakyThrows;
-import lombok.Value;
 import me.sizableshrimp.adventofcode2020.Main;
 import me.sizableshrimp.adventofcode2020.templates.Day;
 
@@ -39,19 +38,6 @@ import java.util.stream.Stream;
 
 public class DataManager {
     private static String sessionCookie;
-
-    @SneakyThrows
-    private static void load() {
-        if (sessionCookie != null)
-            return;
-
-        Path path = Path.of("session.txt");
-
-        if (!Files.exists(path))
-            throw new IllegalArgumentException("No AOC session cookie found! Please create session.txt");
-
-        sessionCookie = Files.readString(path).trim();
-    }
 
     /**
      * The <code>read</code> method is used to locate input data for a specified {@link Day}.
@@ -88,23 +74,22 @@ public class DataManager {
         return getDataFromServer(day, Main.YEAR, path);
     }
 
+    @SneakyThrows
+    private static void load() {
+        if (sessionCookie != null)
+            return;
+
+        Path path = Path.of("session.txt");
+
+        if (!Files.exists(path))
+            throw new IllegalArgumentException("No AOC session cookie found! Please create session.txt");
+
+        sessionCookie = Files.readString(path).trim();
+    }
+
     // public static Result send(int day, Part part, int year, String result) {
     //
     // }
-
-    /**
-     * Reads all input data for a given year from the server using the provided AOC session cookie
-     * and saves it to running directory subfolder "aoc_input". See {@link #read} for more detail.
-     *
-     * @param year The Advent Of Code year to read input data for each day.
-     */
-    public static void writeAllDaysToFile(int year) {
-        for (int i = 1; i <= 25; i++) {
-            String filename = "day" + Main.pad(i) + ".txt";
-            Path path = getBasePath(filename);
-            getDataFromServer(i, year, path);
-        }
-    }
 
     private static List<String> getDataFromServer(int day, int year, Path path) {
         List<String> lines = new ArrayList<>();
@@ -128,6 +113,18 @@ public class DataManager {
         }
 
         return List.copyOf(lines);
+    }
+
+    public static void writeFile(Path path, List<String> lines) {
+        Path parent = path.getParent();
+        try {
+            if (!Files.exists(parent))
+                Files.createDirectory(parent);
+            //remove empty last line of input files although this doesn't really matter? hmm
+            Files.writeString(path, String.join(System.lineSeparator(), lines));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private static List<String> getDataFromFile(Path path) {
@@ -158,20 +155,22 @@ public class DataManager {
         }
     }
 
-    public static void writeFile(Path path, List<String> lines) {
-        Path parent = path.getParent();
-        try {
-            if (!Files.exists(parent))
-                Files.createDirectory(parent);
-            //remove empty last line of input files although this doesn't really matter? hmm
-            Files.writeString(path, String.join(System.lineSeparator(), lines));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
     public static Path getBasePath(String filename) {
         return Path.of("aoc_input", filename);
+    }
+
+    /**
+     * Reads all input data for a given year from the server using the provided AOC session cookie
+     * and saves it to running directory subfolder "aoc_input". See {@link #read} for more detail.
+     *
+     * @param year The Advent Of Code year to read input data for each day.
+     */
+    public static void writeAllDaysToFile(int year) {
+        for (int i = 1; i <= 25; i++) {
+            String filename = "day" + Main.pad(i) + ".txt";
+            Path path = getBasePath(filename);
+            getDataFromServer(i, year, path);
+        }
     }
 
     // @Value

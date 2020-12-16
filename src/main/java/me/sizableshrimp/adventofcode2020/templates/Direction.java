@@ -39,26 +39,15 @@ public enum Direction {
     private static final Direction[] ORDINAL = {NORTHEAST, SOUTHEAST, SOUTHWEST, NORTHWEST};
     private static final Direction[] CARDINAL_ORDINAL = {NORTH, EAST, SOUTH, WEST, NORTHEAST, SOUTHEAST, SOUTHWEST, NORTHWEST};
 
-    public final int degrees;
-    public final int x;
-    public final int y;
-
     static {
         for (Direction dir : values()) {
             degreesMap.put(dir.degrees, dir);
         }
     }
 
-    public static Direction fromDegrees(int degrees) {
-        if (degrees < 0)
-            degrees = 360 + degrees;
-        degrees %= 360;
-
-        Direction dir = degreesMap.get(degrees);
-        if (dir == null)
-            throw new IllegalArgumentException("Invalid degrees: " + degrees);
-        return dir;
-    }
+    public final int degrees;
+    public final int x;
+    public final int y;
 
     public static Map<Character, Direction> getCardinalDirections(char up, char right, char down, char left) {
         return Map.of(up, NORTH, right, EAST, down, SOUTH, left, WEST);
@@ -82,18 +71,6 @@ public enum Direction {
         };
     }
 
-    public Direction opposite() {
-        return fromDegrees(this.degrees + 180);
-    }
-
-    public Coordinate asCoords() {
-        return Coordinate.of(this.x, this.y);
-    }
-
-    public Direction relativeDegrees(int degrees) {
-        return fromDegrees(this.degrees + degrees);
-    }
-
     public static Direction[] cardinalDirections() {
         return CARDINAL;
     }
@@ -107,5 +84,28 @@ public enum Direction {
 
     public static Direction[] cardinalOrdinalDirections() {
         return CARDINAL_ORDINAL;
+    }
+
+    public Direction opposite() {
+        return fromDegrees(this.degrees + 180);
+    }
+
+    public static Direction fromDegrees(int degrees) {
+        if (degrees < 0)
+            degrees = 360 + degrees;
+        degrees %= 360;
+
+        Direction dir = degreesMap.get(degrees);
+        if (dir == null)
+            throw new IllegalArgumentException("Invalid degrees: " + degrees);
+        return dir;
+    }
+
+    public Coordinate asCoords() {
+        return Coordinate.of(this.x, this.y);
+    }
+
+    public Direction relativeDegrees(int degrees) {
+        return fromDegrees(this.degrees + degrees);
     }
 }
