@@ -1,10 +1,5 @@
 #!/usr/bin/env sh
 
-#
-# Copyright (c) 2020 SizableShrimp.
-# This file is provided under version 3 of the GNU Lesser General Public License.
-#
-
 ##############################################################################
 ##
 ##  Gradle start up script for UN*X
