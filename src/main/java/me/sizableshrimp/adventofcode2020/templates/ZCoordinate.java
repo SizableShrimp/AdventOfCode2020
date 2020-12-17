@@ -1,20 +1,22 @@
 package me.sizableshrimp.adventofcode2020.templates;
 
+import lombok.AllArgsConstructor;
 import lombok.Value;
 
 /**
  * A 3-dimensional coordinate object that holds an x, a y, and a z value.
  */
 @Value
+@AllArgsConstructor(staticName = "of")
 public class ZCoordinate {
-    public static final ZCoordinate ZERO = new ZCoordinate(0, 0, 0);
+    public static final ZCoordinate ORIGIN = new ZCoordinate(0, 0, 0);
     public int x, y, z;
 
     /**
      * Parses a coordinate in the format "x,y,z".
      *
      * @param coord The input string of which to parse a coordinate.
-     * @return A new {@link Coordinate} object.
+     * @return A new {@link ZCoordinate} object.
      */
     public static ZCoordinate parse(String coord) {
         String[] arr = coord.split(",");
@@ -42,11 +44,11 @@ public class ZCoordinate {
     }
 
     /**
-     * Finds the Manhattan distance from this coordinate to (0, 0, 0).
+     * Finds the Manhattan distance from this coordinate to the origin at (0, 0, 0).
      *
-     * @return The Manhattan distance from this coordinate to (0, 0, 0).
+     * @return The Manhattan distance from this coordinate to the origin at (0, 0, 0).
      */
-    public int distanceZero() {
+    public int distanceToOrigin() {
         return distance(0, 0, 0);
     }
 
