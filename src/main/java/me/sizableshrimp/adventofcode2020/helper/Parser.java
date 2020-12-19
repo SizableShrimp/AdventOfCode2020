@@ -61,8 +61,17 @@ public class Parser {
     }
 
     public static MatchWrapper parseMatch(Matcher matcher) {
-        if (!matcher.matches())
-            throw new IllegalStateException("Matcher does not match the full input string");
+        return parseMatch(matcher, false);
+    }
+
+    private static MatchWrapper parseMatch(Matcher matcher, boolean find) {
+        if (find) {
+            if (!matcher.find())
+                throw new IllegalStateException("Matcher did not find a match in the input string");
+        } else {
+            if (!matcher.matches())
+                throw new IllegalStateException("Matcher does not match the full input string");
+        }
         return new MatchWrapper(matcher.toMatchResult());
     }
 
@@ -103,5 +112,10 @@ public class Parser {
     public static MatchWrapper parseMatch(String regex, String input) {
         Pattern pattern = CACHED_PATTERNS.computeIfAbsent(regex, Pattern::compile);
         return parseMatch(pattern.matcher(input));
+    }
+
+    public static MatchWrapper findFirstMatch(String regex, String input) {
+        Pattern pattern = CACHED_PATTERNS.computeIfAbsent(regex, Pattern::compile);
+        return parseMatch(pattern.matcher(input), true);
     }
 }
