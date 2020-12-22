@@ -70,7 +70,6 @@ public class Processor {
     }
 
     // Splits
-
     public static <T> List<List<T>> split(List<T> list, Predicate<T> splitter) {
         int length = list.size();
         return split(length, i -> splitter.test(list.get(i)), list::subList)

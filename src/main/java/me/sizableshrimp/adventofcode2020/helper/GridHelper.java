@@ -48,6 +48,47 @@ public class GridHelper {
         return convert(grid, lines, c -> Parser.parseEnumState(enumConstants, c));
     }
 
+    public static <T> T[][] reflectY(BiFunction<Integer, Integer, T[][]> generator, T[][] grid) {
+        int yLength = grid.length;
+        int xLength = grid[0].length;
+        T[][] reflected = generator.apply(yLength, xLength);
+        for (int y = 0; y < yLength; y++) {
+            reflected[y] = Arrays.copyOf(grid[yLength - y - 1], xLength);
+        }
+        return reflected;
+    }
+
+    public static <T> T[][] reflectX(BiFunction<Integer, Integer, T[][]> generator, T[][] grid) {
+        int yLength = grid.length;
+        int xLength = grid[0].length;
+        T[][] reflected = generator.apply(yLength, xLength);
+        for (int y = 0; y < yLength; y++) {
+            for (int x = 0; x < xLength; x++) {
+                reflected[y][x] = grid[y][xLength - x - 1];
+            }
+        }
+        return reflected;
+    }
+
+    public static <T> T[][] rotate(BiFunction<Integer, Integer, T[][]> generator, T[][] grid, int degrees) {
+        if (degrees < 0)
+            degrees = 360 + degrees;
+        degrees %= 360;
+
+        int yLength = grid.length;
+        int xLength = grid[0].length;
+        for (int i = 0; i < degrees; i += 90) {
+            T[][] rotated = generator.apply(yLength, xLength);
+            for (int y = 0; y < yLength; y++) {
+                for (int x = 0; x < xLength; x++) {
+                    rotated[y][x] = grid[xLength - x - 1][y];
+                }
+            }
+            grid = rotated;
+        }
+        return grid;
+    }
+
     public static boolean[][] convertBool(BiFunction<Integer, Integer, boolean[][]> generator, List<String> lines, Predicate<Character> pred) {
         boolean[][] grid = generator.apply(lines.size(), lines.get(0).length());
         return convertBool(grid, lines, pred);
