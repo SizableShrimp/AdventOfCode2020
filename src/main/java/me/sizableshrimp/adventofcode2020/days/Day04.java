@@ -3,6 +3,7 @@ package me.sizableshrimp.adventofcode2020.days;
 import lombok.AllArgsConstructor;
 import me.sizableshrimp.adventofcode2020.helper.Processor;
 import me.sizableshrimp.adventofcode2020.templates.Day;
+import one.util.streamex.EntryStream;
 
 import java.util.EnumMap;
 import java.util.Map;
@@ -34,7 +35,7 @@ public class Day04 extends Day {
             boolean hasAll = current.size() == 7; // Keys are always valid so we can just check the amount
             if (hasAll) {
                 part1++;
-                boolean valid = current.entrySet().stream().map(e -> e.getKey().isValid(e.getValue())).reduce(true, (a, b) -> a && b);
+                boolean valid = EntryStream.of(current).map(e -> e.getKey().isValid(e.getValue())).reduce(true, (a, b) -> a && b);
                 if (valid)
                     part2++;
             }

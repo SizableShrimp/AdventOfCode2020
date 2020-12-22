@@ -4,6 +4,7 @@ import me.sizableshrimp.adventofcode2020.intcode.Instruction;
 import me.sizableshrimp.adventofcode2020.intcode.Intcode;
 import me.sizableshrimp.adventofcode2020.intcode.OpCode;
 import me.sizableshrimp.adventofcode2020.templates.Day;
+import one.util.streamex.StreamEx;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,9 +19,9 @@ public class Day08 extends Day {
         Intcode.ExitLoop exitLoop = new Intcode(baseInstructions).runUntilRepeat();
         Result result = new Result(exitLoop.getAccumulator(), null);
 
-        Set<Instruction> possible = exitLoop.getSeen().stream()
+        Set<Instruction> possible = StreamEx.of(exitLoop.getSeen())
                 .filter(inst -> inst.getCode() == OpCode.JUMP || inst.getCode() == OpCode.NOP)
-                .collect(Collectors.toSet());
+                .toSet();
 
         for (Instruction inst : possible) {
             Instruction opposite = switch (inst.getCode()) {

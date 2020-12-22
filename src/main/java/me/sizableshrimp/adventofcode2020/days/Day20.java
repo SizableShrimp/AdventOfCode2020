@@ -36,6 +36,7 @@ public class Day20 extends SeparatedDay {
                     ".#..#..#..#..#..#..."));
     private static final Tile[][] SEA_MONSTER_REVERSED_X = GridHelper.reflectX((y, x) -> new Tile[y][x], SEA_MONSTER);
     private static final Tile[][] SEA_MONSTER_REVERSED_Y = GridHelper.reflectY((y, x) -> new Tile[y][x], SEA_MONSTER);
+    private static final Tile[][] SEA_MONSTER_REVERSED_XY = GridHelper.reflectY((y, x) -> new Tile[y][x], SEA_MONSTER_REVERSED_X);
 
     @Override
     protected Object part1() {
@@ -200,15 +201,12 @@ public class Day20 extends SeparatedDay {
     private int getRoughness(Tile[][] findMonsters) {
         int roughness = GridHelper.countOccurrences(findMonsters, Tile.WALL);
         int monsterCount = GridHelper.countOccurrences(SEA_MONSTER, Tile.WALL);
-        for (int degrees = 0; degrees <= 270; degrees += 90) {
-            Tile[][] find = GridHelper.rotate((y, x) -> new Tile[y][x], findMonsters, degrees);
-            long before = roughness;
-            roughness -= findSeaMonsters(monsterCount, find, SEA_MONSTER);
-            roughness -= findSeaMonsters(monsterCount, find, SEA_MONSTER_REVERSED_X);
-            roughness -= findSeaMonsters(monsterCount, find, SEA_MONSTER_REVERSED_Y);
-            if (before != roughness)
-                break;
-        }
+
+        roughness -= monsterCount * findSeaMonsters(findMonsters, SEA_MONSTER);
+        roughness -= monsterCount * findSeaMonsters(findMonsters, SEA_MONSTER_REVERSED_X);
+        roughness -= monsterCount * findSeaMonsters(findMonsters, SEA_MONSTER_REVERSED_Y);
+        roughness -= monsterCount * findSeaMonsters(findMonsters, SEA_MONSTER_REVERSED_XY);
+
         return roughness;
     }
 
@@ -229,7 +227,7 @@ public class Day20 extends SeparatedDay {
         return reversed;
     }
 
-    private int findSeaMonsters(long monsterCount, Tile[][] find, Tile[][] seaMonster) {
+    private int findSeaMonsters(Tile[][] find, Tile[][] seaMonster) {
         int result = 0;
         for (int y = 0; y < find.length - seaMonster.length; y++) {
             for (int x = 0; x < find[0].length - seaMonster[0].length; x++) {
@@ -246,7 +244,7 @@ public class Day20 extends SeparatedDay {
                         break;
                 }
                 if (valid)
-                    result += monsterCount;
+                    result++;
             }
         }
         return result;
