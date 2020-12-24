@@ -1,125 +1,91 @@
 package me.sizableshrimp.adventofcode2020.days;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
 import me.sizableshrimp.adventofcode2020.templates.SeparatedDay;
 
-import java.util.List;
-
 public class Day23 extends SeparatedDay {
-    private Node start;
-    private Node end;
-    private int max;
-    private int labelSize;
+    private int start;
+    private int[] part1;
+    private int[] part2;
 
     @Override
     protected Object part1() {
-        Node one = playCupsGame(start, labelSize, 100);
+        // Maps current cup value -> next cup value
+        int[] cups = playCupsGame(part1, 100);
 
         StringBuilder builder = new StringBuilder();
-        Node current = one.next;
+        int current = cups[1];
         do {
-            builder.append(current.value);
-            current = current.next;
-        } while (current != one);
+            builder.append(current);
+            current = cups[current];
+        } while (current != 1);
 
         return builder.toString();
     }
 
     @Override
     protected Object part2() {
-        // Re-make the node
-        parse();
-        for (int i = max + 1; i <= 1_000_000; i++) {
-            addToEnd(i);
-        }
-
-        Node one = playCupsGame(start, 1_000_000, 10_000_000);
-        return (long) one.next.value * one.next.next.value;
+        int[] cups = playCupsGame(part2, 10_000_000);
+        return (long) cups[1] * cups[cups[1]];
     }
 
-    private Node playCupsGame(Node current, int size, int moves) {
-        // Used to access a node from its value
-        Node[] fastPath = createFastPath(current, size);
+    private int[] playCupsGame(int[] cups, int moves) {
+        int current = start;
 
         for (int move = 0; move < moves; move++) {
-            current = doMove(current, fastPath);
+            current = doMove(cups, current);
         }
 
-        return fastPath[1];
+        return cups;
     }
 
-    private Node doMove(Node current, Node[] fastPath) {
-        Node startSub = current.next;
-        Node endSub = current.next.next.next;
-        current.setNext(endSub.next);
-        endSub.setNext(null);
-        List<Node> sub = List.of(startSub, startSub.next, endSub);
+    private int doMove(int[] cups, int current) {
+        int startSub = cups[current];
+        int middleSub = cups[startSub];
+        int endSub = cups[middleSub];
+        cups[current] = cups[endSub];
 
-        Node destination = current;
+        int destination = current;
         do {
-            int nextIndex = destination.value - 1;
-            if (nextIndex <= 0) {
-                nextIndex = fastPath[fastPath.length - 1].value;
+            destination--;
+            if (destination <= 0) {
+                destination = cups.length - 1;
             }
-            destination = fastPath[nextIndex];
-        } while (sub.contains(destination));
+        } while (destination == startSub || destination == middleSub || destination == endSub);
 
-        Node after = destination.next;
-        destination.setNext(startSub);
-        endSub.setNext(after);
+        int after = cups[destination];
+        cups[destination] = startSub;
+        cups[endSub] = after;
 
-        return current.next;
-    }
-
-    private Node[] createFastPath(Node start, int size) {
-        Node[] fastPath = new Node[size + 1];
-        Node current = start;
-
-        for (int i = 0; i < size; i++) {
-            fastPath[current.value] = current;
-            current = current.next;
-        }
-
-        return fastPath;
+        return cups[current];
     }
 
     @Override
     protected void parse() {
-        start = null;
-        end = null;
-        max = -1;
         String line = lines.get(0);
-        labelSize = line.length();
+        part1 = new int[line.length() + 1];
+        part2 = new int[1_000_001];
+
+        int max = -1;
+        int[] raw = new int[1_000_000];
         String[] split = line.split("");
 
-        for (String s : split) {
-            int digit = Integer.parseInt(s);
-            addToEnd(digit);
+        for (int i = 0; i < split.length; i++) {
+            int digit = Integer.parseInt(split[i]);
+            raw[i] = digit;
             if (digit > max)
                 max = digit;
         }
-    }
-
-    private void addToEnd(int digit) {
-        Node next = new Node(digit);
-        if (start == null) {
-            start = next;
-            start.setNext(start);
-            end = start;
-        } else {
-            next.setNext(start);
-            end.setNext(next);
-            end = next;
+        for (int i = max; i < 1_000_000; i++) {
+            raw[i] = i + 1;
         }
-    }
 
-    @Data
-    private static class Node {
-        final int value;
-        @ToString.Exclude
-        @EqualsAndHashCode.Exclude
-        Node next;
+        for (int i = 0; i < raw.length; i++) {
+            int digit = raw[i];
+            if (i == 0)
+                start = digit;
+            if (i < split.length)
+                part1[digit] = raw[(i + 1) % split.length];
+            part2[digit] = raw[(i + 1) % raw.length];
+        }
     }
 }
