@@ -29,6 +29,6 @@ public class Day02 extends Day {
                 positionCount++;
         }
 
-        return new Result(validCount, positionCount);
+        return Result.of(validCount, positionCount);
     }
 }

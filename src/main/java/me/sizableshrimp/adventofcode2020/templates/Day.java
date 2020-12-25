@@ -1,8 +1,13 @@
 package me.sizableshrimp.adventofcode2020.templates;
 
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import lombok.Value;
+import lombok.experimental.NonFinal;
 import me.sizableshrimp.adventofcode2020.helper.DataManager;
 
 import java.util.List;
@@ -35,7 +40,7 @@ public abstract class Day {
     // protected String raw = String.join("\n", lines);
 
     /**
-     * Execute a given day; outputting part 1, part 2, and the time taken.
+     * Execute a given day; printing out part 1, part 2, and the time taken.
      * Time taken is using {@link System#nanoTime()} and is not a real benchmark.
      *
      * @return A {@link Result} holding data of the first and second part.
@@ -49,6 +54,19 @@ public abstract class Day {
         System.out.println("Part 2: " + result.part2);
         System.out.printf("Completed in %.3fms%n%n", time);
         return result;
+    }
+
+    /**
+     * Execute a given day; returning a {@link TimedResult} object holding part 1, part 2, and the time taken.
+     * Time taken is using {@link System#nanoTime()} and is not a real benchmark.
+     *
+     * @return A {@link TimedResult} holding data of the first part, second part, and time taken.
+     */
+    public final TimedResult runTimed() {
+        long before = System.nanoTime();
+        Result result = parseAndEvaluate();
+        long after = System.nanoTime();
+        return new TimedResult(result.part1, result.part2, after - before);
     }
 
     /**
@@ -83,9 +101,9 @@ public abstract class Day {
         parse();
     }
 
-    @Data
-    @AllArgsConstructor
-    @NoArgsConstructor
+    @Value
+    @NonFinal
+    @AllArgsConstructor(staticName = "of")
     public static class Result {
         Object part1;
         Object part2;
@@ -97,13 +115,19 @@ public abstract class Day {
         public String getPart2() {
             return Objects.toString(part2);
         }
+    }
 
-        public Object getPart1Obj() {
-            return part1;
-        }
+    @Value
+    @EqualsAndHashCode(callSuper = false)
+    public static class TimedResult extends Result {
+        /**
+         * Time taken in nanoseconds
+         */
+        long timeTaken;
 
-        public Object getPart2Obj() {
-            return part2;
+        private TimedResult(Object part1, Object part2, long timeTaken) {
+            super(part1, part2);
+            this.timeTaken = timeTaken;
         }
     }
 }

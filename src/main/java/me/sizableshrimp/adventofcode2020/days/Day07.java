@@ -34,7 +34,7 @@ public class Day07 extends Day {
             queue.addAll(parents);
         }
 
-        return new Result(seen.size(), gold.calcChildren());
+        return Result.of(seen.size(), gold.calcChildren());
     }
 
     @Override

@@ -10,6 +10,8 @@ import java.time.LocalDateTime;
 import java.time.Month;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.util.AbstractMap;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -165,13 +167,24 @@ public class Main {
                 e.printStackTrace();
             }
         }
-        System.out.println("All Days\n\n");
+        List<Map.Entry<Integer, Day.TimedResult>> results = new ArrayList<>(25);
         long before = System.nanoTime();
         for (Map.Entry<Integer, Day> entry : days.entrySet()) {
-            System.out.println("Day " + entry.getKey() + ":");
-            entry.getValue().run();
+            // Have to print separately so as to not skew runtimes
+            results.add(new AbstractMap.SimpleEntry<>(entry.getKey(), entry.getValue().runTimed()));
         }
         long after = System.nanoTime();
+
+        System.out.println("All Days\n\n");
+        for (Map.Entry<Integer, Day.TimedResult> entry : results) {
+            int day = entry.getKey();
+            Day.TimedResult result = entry.getValue();
+
+            System.out.println("Day " + day + ":");
+            System.out.println("Part 1: " + result.getPart1());
+            System.out.println("Part 2: " + result.getPart2());
+            System.out.printf("Completed in %.3fms%n%n", result.getTimeTaken() / 1_000_000f);
+        }
         System.out.printf("Completed all days in %.3fms%n%n", (after - before) / 1_000_000f);
     }
 }

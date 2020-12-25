@@ -43,7 +43,7 @@ public class Day04 extends Day {
             current.clear();
         }
 
-        return new Result(part1, part2);
+        return Result.of(part1, part2);
     }
 
     @Override

@@ -29,6 +29,6 @@ public class Day05 extends Day {
         int fakeSum = Math.multiplyExact(max - min + 1, (max + min) / 2);
         long realSum = stats.getSum();
 
-        return new Result(max, fakeSum - realSum);
+        return Result.of(max, fakeSum - realSum);
     }
 }

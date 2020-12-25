@@ -29,6 +29,6 @@ public class Day03 extends Day {
             results[i] = count;
         }
 
-        return new Result(results[1], Arrays.stream(results).reduce((a, b) -> a * b).getAsLong());
+        return Result.of(results[1], Arrays.stream(results).reduce((a, b) -> a * b).getAsLong());
     }
 }

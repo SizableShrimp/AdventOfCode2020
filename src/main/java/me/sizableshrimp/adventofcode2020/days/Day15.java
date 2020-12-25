@@ -7,7 +7,6 @@ public class Day15 extends Day {
 
     @Override
     protected Result evaluate() {
-        Result result = new Result();
         int inputSize = startNums.length;
         int[] data = new int[30_000_000];
 
@@ -20,19 +19,17 @@ public class Day15 extends Day {
         }
 
         // Calculate
+        int part1 = -1;
         for (int turn = inputSize + 1; ; turn++) {
             if (turn == 2021) {
-                result.setPart1(last);
+                part1 = turn;
             } else if (turn == 30_000_001) {
-                result.setPart2(last);
-                break;
+                return Result.of(part1, last);
             }
             int index = data[last];
             data[last] = turn - 1;
             last = index == 0 ? 0 : (turn - 1) - index;
         }
-
-        return result;
     }
 
     @Override

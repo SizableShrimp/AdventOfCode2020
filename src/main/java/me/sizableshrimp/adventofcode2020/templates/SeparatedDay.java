@@ -8,7 +8,7 @@ package me.sizableshrimp.adventofcode2020.templates;
 public abstract class SeparatedDay extends Day {
     @Override
     protected final Result evaluate() {
-        return new Result(part1(), part2());
+        return Result.of(part1(), part2());
     }
 
     /**

@@ -9,7 +9,6 @@ import one.util.streamex.StreamEx;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 public class Day08 extends Day {
     private List<Instruction> baseInstructions;
@@ -17,7 +16,7 @@ public class Day08 extends Day {
     @Override
     protected Result evaluate() {
         Intcode.ExitLoop exitLoop = new Intcode(baseInstructions).runUntilRepeat();
-        Result result = new Result(exitLoop.getAccumulator(), null);
+        long part1 = exitLoop.getAccumulator();
 
         Set<Instruction> possible = StreamEx.of(exitLoop.getSeen())
                 .filter(inst -> inst.getCode() == OpCode.JUMP || inst.getCode() == OpCode.NOP)
@@ -33,12 +32,11 @@ public class Day08 extends Day {
             copy.set(opposite.getIndex(), opposite);
             Intcode.ExitState exitState = new Intcode(copy).runUntilExitOrRepeat();
             if (exitState.isExited()) {
-                result.setPart2(exitState.getAccumulator());
-                break;
+                return Result.of(part1, exitState.getAccumulator());
             }
         }
 
-        return result;
+        throw new IllegalStateException();
     }
 
     @Override
